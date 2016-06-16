@@ -1,1 +1,64 @@
 == NVMe notes ==
+
+Chapter 1: introduction
+
+NVM Express (NVMe over PCIe): 
+define a register level interface for host software to communicate with a non-volatile memory subsystem over PCI express
+
+NVMe over Fabrics:
+define a protocol interface and related extensions to NVMe that enable operation over other interconnects
+(e.g., Ethernet, InfiniBant, Fibre Channel).
+
+The interface has the following key attributes (page 9)
+
+An NVM Express controller is associated with a single PCI Function: Controller Capabilities reg, Identify Controller data structure.
+
+A namespace is a quantity of non-volatile memory that may be formatted into logical blocks.
+		create, delete, attach namespace commands,
+		identify namespace data structure for namespace id 0xFFFFFFFFh for capabilities and settings.
+
+Submission Queue:  host place cmds into it.
+Completion Queue: controller place completion into it.
+Multiple Submission Queues  may utilize the same Completion Queue.
+
+An Admin Submission and assoicated Completion Queue exist for the purpose of controller management and control
+(Admin Command Set)
+		create, delete io sq/cq, abort commands etc
+
+IO queue pair: 1:1 sq/cq mapping, n:1 sq/cq mapping
+(NVM Command Set)
+
+SQ (submission queue): circular buffer with a fixed slot size, 64 bytes cmd,
+		host software updates the appropriate SQ Tail doorbell register when theere are one to n new commands to execute.
+		controller fetch SQ entries in order from the SQ, but may execute in any order.
+
+Physical Region Page (PRP), Scatter Gather Lists (SGL) : (page 11)
+Each command may include two PRP entries or one Scatter Gather List
+
+CQ (completion queue): circular buffer with a fixed slot size, post status for completed commands.
+		SQ identifier: command identifier that is assigned by host software.
+		host software update CQ head pointer after it has processed completion queue entries (indicating the last free CQ entry).
+
+Multi-Path IO: refer to two or more completely independent PCI Express paths between a single host and a namespace
+Namespace Sharing: refer to the ability for two or more hosts to access a common shared namespace using different NVME controller.
+
+Arbitration Burst:
+		The maximum number of commands that may be launched at one time from a SQ that is using rr or wrr with urgent
+		priority class arbitration.
+
+Arbitration mechanism:
+		The method used to determine which SQ is selected next to launch commands for execution by the controller.
+		rr, wrr with urgent priority class, vendor specific
+
+NVM subsystem:
+		An NVM subsystem includes one or more controllers, one or more namespaces, one or more PCIE ports,
+			a non-volatile memory storage medium, and an interface between the controler(s) and non-volatile memory storage medium.
+
+
+
+
+
+
+
+
+
