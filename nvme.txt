@@ -1,6 +1,6 @@
 == NVMe notes ==
 
-Chapter 1: introduction
+-- Chapter 1: introduction --
 
 NVM Express (NVMe over PCIe): 
 define a register level interface for host software to communicate with a non-volatile memory subsystem over PCI express
@@ -53,6 +53,17 @@ Arbitration mechanism:
 NVM subsystem:
 		An NVM subsystem includes one or more controllers, one or more namespaces, one or more PCIE ports,
 			a non-volatile memory storage medium, and an interface between the controler(s) and non-volatile memory storage medium.
+
+
+-- Chapter 2: System Bus Register --
+
+PCI Header notes (page 21)
+MSI Capability, 
+Advanced Error Reporting Capability (enable robust error handling)
+
+
+-- Chapter 3: Controller Register --
+Controller registers are located in the MLBAR/MUBAR registers (PCI BAR0 and BAR1): mmio, uncacheable
 
 
 
