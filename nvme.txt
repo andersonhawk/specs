@@ -63,13 +63,40 @@ Advanced Error Reporting Capability (enable robust error handling)
 
 
 -- Chapter 3: Controller Register --
+
 Controller registers are located in the MLBAR/MUBAR registers (PCI BAR0 and BAR1): mmio, uncacheable
 
 
+-- Chapter 4: Memory Structures --
+CQ Head Doorbells, SQ Tail Doorbells: host software update the doorbell registers
 
+Submitter, consumer both shall take queue wrap conditions into account. 
 
+Host software shall create the CQ before creating any associated SQ.
+Host software shall delete all associated SQ prior to deleting a CQ.
+Host software issue Delete I/O SQ (abort all commands submitted for SQ).
 
+If host software writes an invalid value to the SQ Tail Doorbell or CQ Head Doorbell register, an Asynchronous Event Request
+		comand is outstanding, then an asynchronous event is posted to the Admin Completion Queue with a status code
+		of Invalid Doorbell Write value.
 
+I/O SQ, CQ defined as 64K entries, Admin SQ, CQ defined as 4K entries.
+ 
+Physical Region Page Entry and List
+	A PRP (physical region page) entry is a pointer to a physical memory page.
+	PRPs are used as a scatter/gather mechanism for data transfers between the controller and memory.
+	PRP entries are a fixed size.
 
+	PRP list (A physical region page list is a set of PRP entries in a single page of contiguous memory).
+	A PRP List describes additional PRP entries that could not be described within the command itself.
+
+A Scatter Gather List (SGL) is a data structure in memory address space used to describe a data buffer.
+A data buffer is either a source buffer or a destination buffer.
+
+An SGL contains one or more SGL segments.
+An SGL segment is a Qword aligned data structure in a contiguous region of physical memory describing all
+
+The controller may support several physical formats of logical block size and associated metadata size.
+		This is indicated as part of the identify namespace data structure.
 
 
